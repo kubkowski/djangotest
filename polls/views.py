@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,Http404
 from django.template import RequestContext, loader
@@ -19,3 +20,8 @@ def results(request, poll_id):
 
 def vote(request, poll_id):
     return HttpResponse("You're voting on poll %s." % poll_id)
+=======
+from django.shortcuts import render
+
+# Create your views here.
+>>>>>>> 4da71ad7af025505fafd1edca6cdd2e71717b09e

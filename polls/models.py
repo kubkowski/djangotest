@@ -1,6 +1,9 @@
 from django.db import models
+<<<<<<< HEAD
 import datetime
 from django.utils import timezone
+=======
+>>>>>>> 4da71ad7af025505fafd1edca6cdd2e71717b09e
 
 # Create your models here.
 class Poll(models.Model):
@@ -10,9 +13,12 @@ class Poll(models.Model):
         return self.question
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+<<<<<<< HEAD
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
+=======
+>>>>>>> 4da71ad7af025505fafd1edca6cdd2e71717b09e
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)

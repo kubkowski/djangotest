@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
+<<<<<<< HEAD
 from polls.models import Choice, Poll
 
 class ChoiceInline(admin.TabularInline):
@@ -19,3 +20,5 @@ class PollAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Poll, PollAdmin)
+=======
+>>>>>>> 4da71ad7af025505fafd1edca6cdd2e71717b09e
