@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView
 from contacts.models import Contact
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 class ListContactView(ListView):
