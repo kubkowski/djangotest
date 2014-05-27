@@ -2,13 +2,25 @@ from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from contacts.models import Contact
 from django.core.urlresolvers import reverse
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 import forms
 
+class LoggedInMixin(object):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoggedInMixin, self).dispatch(*args, **kwargs)
+
 # Create your views here.
-class ListContactView(ListView):
+class ListContactView(LoggedInMixin, ListView):
 
     model = Contact
     template_name = 'contact_list.html'
+
+    def get_queryset(self):
+
+        return Contact.objects.filter(owner=self.request.user)
 
 class CreateContactView(CreateView):
 
@@ -51,7 +63,41 @@ class DeleteContactView(DeleteView):
     def get_success_url(self):
         return reverse('contacts-list')
 
-class ContactView(DetailView):
+class ContactView(LoggedInMixin, DetailView):
 
     model = Contact
     template_name = 'contact.html'
+
+
+    def get_object(self, queryset=None):
+        """Returns the object the view is displaying.
+
+        """
+
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        queryset = queryset.filter(
+            pk=pk,
+            owner=self.request.user,
+        )
+
+        try:
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_(u"No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+
+        return obj
+
+class EditContactAddressView(UpdateView):
+
+    model = Contact
+    template_name = 'edit_addresses.html'
+    form_class = forms.ContactAddressFormSet
+
+    def get_success_url(self):
+
+        # redirect to the Contact view.
+        return self.get_object().get_absolute_url()
